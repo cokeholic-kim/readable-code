@@ -1,17 +1,22 @@
 package cleancode.minesweeper.tobe;
 
+import cleancode.minesweeper.tobe.gamelevel.GameLevel;
 import cleancode.minesweeper.tobe.io.ConsoleInputHandler;
 import cleancode.minesweeper.tobe.io.ConsoleOutPutHandler;
 
 public class MineSweeper {
-    public final int BOARD_ROW_SIZE = 8;
-    public final int BOARD_COL_SIZE = 10;
+    private final int BOARD_ROW_SIZE = 8;
+    private final int BOARD_COL_SIZE = 10;
 
-    private final GameBoard gameBoard = new GameBoard(BOARD_ROW_SIZE, BOARD_COL_SIZE);
+    private final GameBoard gameBoard;
+    private final BoardIndexConverter boardIndexConverter = new BoardIndexConverter();
     private final ConsoleInputHandler inputHandler = new ConsoleInputHandler();
     private final ConsoleOutPutHandler outPutHandler = new ConsoleOutPutHandler();
     private int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
 
+    public MineSweeper(GameLevel gameLevel){
+        gameBoard = new GameBoard(gameLevel);
+    }
     public void run() {
         outPutHandler.showGameStartComments();
         gameBoard.initializeGame();
@@ -41,8 +46,8 @@ public class MineSweeper {
     }
 
     private void actOnCell(String cellInput, String userActionInput) {
-        int selectedColIndex = getSelectedColIndex(cellInput);
-        int selectedRowIndex = getSelectedRowIndex(cellInput);
+        int selectedColIndex = boardIndexConverter.getSelectedColIndex(cellInput,gameBoard.getColSize());
+        int selectedRowIndex = boardIndexConverter.getSelectedRowIndex(cellInput,gameBoard.getRowSize());
 
         if (doesUserChooseToPlantFlag(userActionInput)) {
             gameBoard.flag(selectedRowIndex, selectedColIndex);
@@ -77,15 +82,7 @@ public class MineSweeper {
         return userActionInput.equals("2");
     }
 
-    private int getSelectedRowIndex(String cellInput) {
-        char cellInputRow = cellInput.charAt(1);
-        return convertRowFrom(cellInputRow);
-    }
 
-    private int getSelectedColIndex(String cellInput) {
-        char cellInputCol = cellInput.charAt(0);
-        return convertColFrom(cellInputCol);
-    }
 
     private String getUserActionInputFromUser() {
         outPutHandler.printCommentForUserAction();
@@ -116,48 +113,7 @@ public class MineSweeper {
     }
 
 
-    private int convertRowFrom(char cellInputRow) {
-        int rowIndex = Character.getNumericValue(cellInputRow);
-        if (rowIndex >= BOARD_ROW_SIZE) {
-            throw new GameException("잘못된 입력 입니다");
-        }
-        return rowIndex - 1;
-    }
 
-    private int convertColFrom(char cellInputCol) {
-        switch (cellInputCol) {
-            case 'a':
-                return 0;
-            case 'b':
-                return 1;
-
-            case 'c':
-                return 2;
-
-            case 'd':
-                return 3;
-
-            case 'e':
-                return 4;
-
-            case 'f':
-                return 5;
-
-            case 'g':
-                return 6;
-
-            case 'h':
-                return 7;
-
-            case 'i':
-                return 8;
-
-            case 'j':
-                return 9;
-            default:
-                throw new GameException("잘못된 입력 입니다.");
-        }
-    }
 
 
 }
