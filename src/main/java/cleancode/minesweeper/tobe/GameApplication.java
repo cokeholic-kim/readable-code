@@ -1,6 +1,6 @@
 package cleancode.minesweeper.tobe;
 
-import cleancode.minesweeper.tobe.gamelevel.Advanced;
+import cleancode.minesweeper.tobe.gamelevel.Beginner;
 import cleancode.minesweeper.tobe.io.ConsoleInputHandler;
 import cleancode.minesweeper.tobe.io.ConsoleOutPutHandler;
 import cleancode.minesweeper.tobe.io.InputHandler;
@@ -10,7 +10,7 @@ public class GameApplication {
     public static void main(String[] args) {
         InputHandler inputHandler = new ConsoleInputHandler();
         OutPutHandler outPutHandler = new ConsoleOutPutHandler();
-        MineSweeper game = new MineSweeper(new Advanced(),inputHandler,outPutHandler);
+        MineSweeper game = new MineSweeper(new Beginner(), inputHandler, outPutHandler);
         game.initialize();
         game.run();
     }
