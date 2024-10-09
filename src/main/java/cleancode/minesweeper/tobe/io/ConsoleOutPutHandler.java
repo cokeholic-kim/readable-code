@@ -3,17 +3,12 @@ package cleancode.minesweeper.tobe.io;
 import cleancode.minesweeper.tobe.GameBoard;
 import cleancode.minesweeper.tobe.GameException;
 import cleancode.minesweeper.tobe.cell.CellSnapShot;
-import cleancode.minesweeper.tobe.cell.CellSnapshotStatus;
+import cleancode.minesweeper.tobe.io.sign.CellSignProvider;
 import cleancode.minesweeper.tobe.position.CellPosition;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class ConsoleOutPutHandler implements OutPutHandler {
-
-    private static final String LAND_MINE_SIGN = "☼";
-    private static final String EMPTY_SIGN = "■";
-    private static final String FLAG_SIGN = "⚑";
-    private static final String UNCHECKED_SIGN = "□";
 
     @Override
     public void showGameStartComments() {
@@ -35,33 +30,13 @@ public class ConsoleOutPutHandler implements OutPutHandler {
                 CellPosition cellPosition = CellPosition.of(row, col);
 
                 CellSnapShot snapShot = board.getSnapShot(cellPosition);
-                String cellSign = decideCellSignFrom(snapShot);
+                String cellSign = CellSignProvider.findCellSignFrom(snapShot);
 
                 System.out.print(cellSign + " ");
             }
             System.out.println();
         }
         System.out.println();
-    }
-
-    private String decideCellSignFrom(CellSnapShot snapShot) {
-        CellSnapshotStatus status = snapShot.getStatus();
-        if(status == CellSnapshotStatus.EMPTY) {
-            return EMPTY_SIGN;
-        }
-        if(status == CellSnapshotStatus.FLAG) {
-            return FLAG_SIGN;
-        }
-        if (status == CellSnapshotStatus.LAND_MINE) {
-            return LAND_MINE_SIGN;
-        }
-        if (status == CellSnapshotStatus.NUMBER){
-            return String.valueOf(snapShot.getNearByLandMineCount());
-        }
-        if(status == CellSnapshotStatus.UNCHECKED) {
-            return UNCHECKED_SIGN;
-        }
-        throw new IllegalArgumentException("확인할 수 없는 셀입니다.");
     }
 
     private String generateColAlphabets(GameBoard board) {

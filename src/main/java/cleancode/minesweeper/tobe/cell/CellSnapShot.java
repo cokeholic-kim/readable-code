@@ -31,6 +31,10 @@ public class CellSnapShot {
         return new CellSnapShot(CellSnapshotStatus.NUMBER,nearByLandMineCount);
     }
 
+    public boolean isSameStatus(CellSnapshotStatus cellSnapshotStatus) {
+        return status == cellSnapshotStatus;
+    }
+
     public static CellSnapShot ofUnchecked(){
         return new CellSnapShot(CellSnapshotStatus.UNCHECKED,0);
     }
@@ -59,4 +63,6 @@ public class CellSnapShot {
     public int hashCode() {
         return Objects.hash(status, nearByLandMineCount);
     }
+
+
 }
